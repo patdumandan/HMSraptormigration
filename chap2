@@ -1,0 +1,156 @@
+gams=read.csv(file.choose(), h=T)
+gams$years=(gams$year-mean(gams$year))/(2*sd(gams$year))
+gams$obs_days=log(gams$obs.hours/24)
+gams$agri.cov=gams$pasture.cov+gams$crop.cov
+str(gams)
+
+#standardized
+
+gams$urban.covs=(gams$urban.cov-mean(gams$urban.cov))/(2*sd(gams$urban.cov))
+gams$forest.covs=(gams$forest.cov-mean(gams$forest.cov))/(2*sd(gams$forest.cov))
+gams$agri.covs=(gams$agri.cov-mean(gams$agri.cov))/(2*sd(gams$agri.cov))
+
+
+modelcov_ag=stan_glmer.nb(count~years+forest.cov+agri.cov+offset(obs_days)+(1+forest.cov+agri.cov|species), data=gams,adapt_delta=0.99,
+                       prior_covariance = decov(regularization = 1, concentration = 1, shape = 1, scale = 1))
+
+saveRDS(modelcov_ag, file="modelcov_ag.RDS")
+
+#urban
+plot1=mcmc_intervals(gam_env_notrait, pars=c( "b[urban.cov species:TUVU]","b[urban.cov species:BLVU]","b[urban.cov species:BAEA]","b[urban.cov species:MERL]", "b[urban.cov species:PEFA]", "b[urban.cov species:COHA]", "b[urban.cov species:GOEA]", "b[urban.cov species:OSPR]", "b[urban.cov species:SSHA]", "b[urban.cov species:BWHA]", "b[urban.cov species:RSHA]", "b[urban.cov species:RTHA]", "b[urban.cov species:NOHA]", "b[urban.cov species:AMKE]", "b[urban.cov species:RLHA]","b[urban.cov species:NOGO]", "urban.cov"), prob=.8,
+                     point_est = "median")+
+  ggplot2::scale_y_discrete(labels = c("Turkey Vulture","Black Vulture", "Bald Eagle","Merlin", "Peregrine Falcon", "Cooper's Hawk", "Golden Eagle", "Osprey", "Sharp-shinned Hawk", "Broad-winged Hawk", "Red-shouldered Hawk","Red-tailed Hawk", "Northern Harrier", "American Kestrel", "Rough-legged Hawk", "Northern Goshawk", "urban area"))+
+  labs(x="slope estimates")
+
+#forest
+plot2=mcmc_intervals(gam_env_notrait, pars=c( "b[forest.cov species:NOGO]","b[forest.cov species:SSHA]","b[forest.cov species:BWHA]","b[forest.cov species:RTHA]", "b[forest.cov species:AMKE]", "b[forest.cov species:NOHA]","b[forest.cov species:RLHA]", "b[forest.cov species:OSPR]", "b[forest.cov species:RSHA]", "b[forest.cov species:COHA]", "b[forest.cov species:GOEA]", "b[forest.cov species:MERL]", "b[forest.cov species:PEFA]", "b[forest.cov species:BAEA]", "b[forest.cov species:BLVU]", "b[forest.cov species:TUVU]","b[forest.cov species:NOGO]", "forest.cov"), prob=.8,
+                     point_est = "median")+
+  ggplot2::scale_y_discrete(labels = c("Northern Goshawk", "Sharp-shinned Hawk", "Broad-winged Hawk", "Red-tailed Hawk", "American Kestrel", "Northern Harrier","Rough-legged Hawk", "Osprey", "Red-shouldered Hawk", "Cooper's Hawk", "Golden Eagle", "Merlin", "Peregrine Falcon", "Bald Eagle", "Black Vulture", "Turkey Vulture", "forest area"))+
+  labs(x="slope estimates")
+plot2
+
+#agri
+plot3=mcmc_intervals(gam_env_notrait, pars=c( "b[agri.cov species:TUVU]","b[agri.cov species:BAEA]","b[agri.cov species:BLVU]","b[agri.cov species:BWHA]", "b[agri.cov species:PEFA]", "b[agri.cov species:RSHA]", "b[agri.cov species:SSHA]", "b[agri.cov species:RTHA]", "b[agri.cov species:GOEA]", "b[agri.cov species:COHA]", "b[agri.cov species:OSPR]", "b[agri.cov species:NOHA]", "b[agri.cov species:MERL]", "b[agri.cov species:AMKE]", "b[agri.cov species:RLHA]","b[agri.cov species:NOGO]", "agri.cov"), prob=.8,
+                     point_est = "median")+
+  ggplot2::scale_y_discrete(labels = c("Northern Goshawk", "Sharp-shinned Hawk", "Broad-winged Hawk", "Red-tailed Hawk", "American Kestrel", "Northern Harrier", "Rough-legged Hawk", "Osprey", "Red-shouldered Hawk", "Cooper's Hawk", "Golden Eagle", "Merlin", "Peregrine Falcon", "Bald Eagle", "Black Vulture", "Turkey Vulture", "agricultural area"))+
+  labs(x="slope estimates")
+plot3
+
+#all fixed
+plot0=mcmc_intervals(modelcov_urb_NON, pars=c("urban.cov", "forest.cov", "years", "(Intercept)"), prob=0.95, prob_outer=0.95, point_est = "mean")+
+  ggplot2::scale_y_discrete(labels = c( "Urban cover", "Forest cover","Year","Intercept" )) +labs(x="slope estimates")
+plot0
+#intercept
+
+plot1=mcmc_intervals(modelcov_urb_NON, pars=c( "b[(Intercept) species:TUVU]","b[(Intercept) species:BAEA]","b[(Intercept) species:BLVU]","b[(Intercept) species:PEFA]", "b[(Intercept) species:COHA]", "b[(Intercept) species:GOEA]", "b[(Intercept) species:MERL]", "b[(Intercept) species:RSHA]", "b[(Intercept) species:BWHA]", "b[(Intercept) species:RTHA]", "b[(Intercept) species:OSPR]", "b[(Intercept) species:NOHA]", "b[(Intercept) species:SSHA]", "b[(Intercept) species:AMKE]","b[(Intercept) species:RLHA]","b[(Intercept) species:NOGO]"), prob=.95,prob_outer=0.95,
+                     point_est = "mean")+
+  ggplot2::scale_y_discrete(labels = c("Turkey Vulture", "Bald Eagle", "Black Vulture", "Peregrine Falcon", "Cooper's Hawk", "Golden Eagle", "Merlin", "Red-shouldered Hawk", "Broad-winged Hawk", "Red-tailed Hawk", "Osprey", "Northern Harrier", "Sharp-shinned Hawk", "American Kestrel", "Rough-legged Hawk", "Northern Goshawk"))+
+  labs(x="slope estimates")
+plot1
+
+
+#forest
+plot2=mcmc_intervals(modelcov_urb_NON, pars=c( "b[forest.cov species:NOGO]","b[forest.cov species:AMKE]","b[forest.cov species:RLHA]","b[forest.cov species:SSHA]", "b[forest.cov species:RTHA]", "b[forest.cov species:NOHA]","b[forest.cov species:BWHA]", "b[forest.cov species:OSPR]", "b[forest.cov species:RSHA]", "b[forest.cov species:COHA]", "b[forest.cov species:GOEA]", "b[forest.cov species:MERL]", "b[forest.cov species:PEFA]", "b[forest.cov species:BLVU]", "b[forest.cov species:BAEA]", "b[forest.cov species:TUVU]"), prob=.95,prob_outer = .95,
+                     point_est = "mean")+
+  ggplot2::scale_y_discrete(labels = c("Northern Goshawk", "American Kestrel", "Rough-legged Hawk", "Sharp-shinned Hawk", "Red-tailed Hawk", "Northern Harrier","Broad-winged Hawk", "Osprey", "Red-shouldered Hawk", "Cooper's Hawk", "Golden Eagle", "Merlin", "Peregrine Falcon","Black Vulture", "Bald Eagle", "Turkey Vulture"))+
+  labs(x="slope estimates")
+plot2
+
+#urban
+plot3=mcmc_intervals(modelcov_urb_NON, pars=c( "b[urban.cov species:TUVU]","b[urban.cov species:BLVU]","b[urban.cov species:BAEA]","b[urban.cov species:MERL]", "b[urban.cov species:COHA]", "b[urban.cov species:PEFA]", "b[urban.cov species:GOEA]", "b[urban.cov species:OSPR]", "b[urban.cov species:SSHA]", "b[urban.cov species:AMKE]", "b[urban.cov species:RSHA]", "b[urban.cov species:RTHA]", "b[urban.cov species:NOHA]", "b[urban.cov species:BWHA]", "b[urban.cov species:RLHA]","b[urban.cov species:NOGO]"), prob=.95,prob_outer = .95,
+                     point_est = "mean")+
+  ggplot2::scale_y_discrete(labels = c("Turkey Vulture", "Black Vulture", "Bald Eagle", "Merlin", "Cooper's Hawk", "Peregrine Falcon", "Golden Eagle", "Osprey", "Sharp-shinned Hawk", "American Kestrel", "Red-shouldered Hawk", "Red-tailed Hawk", "Northern Harrier", "Broad-winged Hawk", "Rough-legged Hawk", "Northern Goshawk" ))+
+  labs(x="slope estimates")
+plot3
+
+fits= modelcov_urb_NON%>%
+  as_tibble()
+str(fits)
+
+#ggarrange
+plotz1=ggarrange(plot_nogo, plot_amke, plot_rlha, plot_ssha,plot_rtha, labels=c("A", "B", "C", "D", "E"), nrow=1, ncol=5)
+plotz2=ggarrange(plot_rtha, plot_tuvu, plot_blvu, plot_baea, labels=c("E", "F", "G", "H"), nrow=1, ncol=4)
+plotz3=ggarrange(plot_pefa, plot_rsha, plot_bwha, plot_noha, labels=c("I", "J", "K", "L"), nrow=1, ncol=4)
+plotz4=ggarrange(plot_merl, plot_coha, plot_goea, plot_ospr, labels=c("M", "N", "O", "P"), nrow=1, ncol=4)
+
+
+plot_nogo=mcmc_intervals(modelcov_urb_NON, pars=c( "b[forest.cov species:NOGO]","b[urban.cov species:NOGO]"), prob=.95,prob_outer = .95,
+                              point_est = "mean")+yaxis_text(on=TRUE)+ xlim(-50,50)+vline_0(color="grey",linetype=2, size=0.9)+
+ggplot2::scale_y_discrete(labels = c("forest", "urban"))
+
+plot_amke=mcmc_intervals(modelcov_urb_NON, pars=c( "b[urban.cov species:AMKE]","b[forest.cov species:AMKE]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=FALSE)+xlim(-50,50)+vline_0(color="grey",linetype=2, size=0.9)
+
+plot_rlha=mcmc_intervals(modelcov_urb_NON, pars=c( "b[urban.cov species:RLHA]","b[forest.cov species:RLHA]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=FALSE)+xlim(-50,50)+vline_0(color="grey",linetype=2, size=0.9)
+  #ggplot2::scale_y_discrete(labels = c("forest cover", "urban cover"))+
+
+plot_ssha=mcmc_intervals(modelcov_urb_NON, pars=c( "b[urban.cov species:SSHA]","b[forest.cov species:SSHA]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=FALSE)+xlim(-50,50)+vline_0(color="grey",linetype=2, size=0.9)
+  #ggplot2::scale_y_discrete(labels = c("forest cover", "urban cover"))
+ #labs(x="slope estimates")
+
+plot_rtha=mcmc_intervals(modelcov_urb_NON, pars=c( "b[urban.cov species:RTHA]","b[forest.cov species:RTHA]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=FALSE)+xlim(-50,50)+vline_0(color="grey",linetype=2, size=0.9)
+ #ggplot2::scale_y_discrete(labels = c("forest cover", "urban cover"))
+ # labs(x="slope estimates")
+
+#PLOT 2##########
+
+plot_tuvu=mcmc_intervals(modelcov_urb_NON, pars=c( "b[forest.cov species:TUVU]","b[urban.cov species:TUVU]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=TRUE)+xlim(-60,70)+vline_0(color="grey",linetype=2, size=0.9)+
+ ggplot2::scale_y_discrete(labels = c("forest", "urban"))
+ # labs(x="slope estimates")
+
+plot_blvu=mcmc_intervals(modelcov_urb_NON, pars=c( "b[urban.cov species:BLVU]","b[forest.cov species:BLVU]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=FALSE)+xlim(-60,70)+vline_0(color="grey",linetype=2, size=0.9)
+  #ggplot2::scale_y_discrete(labels = c("forest cover", "urban cover"))
+#  labs(x="slope estimates")
+
+plot_baea=mcmc_intervals(modelcov_urb_NON, pars=c( "b[urban.cov species:BAEA]","b[forest.cov species:BAEA]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=FALSE)+xlim(-60,70)+vline_0(color="grey",linetype=2, size=0.9)
+  ggplot2::scale_y_discrete(labels = c("forest cover", "urban cover"))
+ # labs(x="slope estimates")
+
+plot_pefa=mcmc_intervals(modelcov_urb_NON, pars=c( "b[urban.cov species:PEFA]","b[forest.cov species:PEFA]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=FALSE)+xlim(-60,70)+vline_0(color="grey",linetype=2, size=0.9)
+  ggplot2::scale_y_discrete(labels = c("forest cover", "urban cover"))
+ # labs(x="slope estimates")
+
+#plot 3A############  
+plot_rsha=mcmc_intervals(modelcov_urb_NON, pars=c( "b[forest.cov species:RSHA]","b[urban.cov species:RSHA]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=TRUE)+xlim(-50,50)+vline_0(color="grey",linetype=2, size=0.9)+
+  ggplot2::scale_y_discrete(labels = c("forest", "urban"))
+ # labs(x="slope estimates")
+
+plot_bwha=mcmc_intervals(modelcov_urb_NON, pars=c( "b[urban.cov species:BWHA]","b[forest.cov species:BWHA]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=FALSE)+xlim(-50,50)+vline_0(color="grey",linetype=2, size=0.9)
+ # ggplot2::scale_y_discrete(labels = c("forest cover", "urban cover"))
+ # labs(x="slope estimates")
+
+plot_noha=mcmc_intervals(modelcov_urb_NON, pars=c( "b[urban.cov species:NOHA]","b[forest.cov species:NOHA]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=FALSE)+xlim(-50,50)+vline_0(color="grey",linetype=2, size=0.9)
+ # ggplot2::scale_y_discrete(labels = c("forest cover", "urban cover"))
+ # labs(x="slope estimates")
+
+#plor 3b############
+plot_merl=mcmc_intervals(modelcov_urb_NON, pars=c( "b[forest.cov species:MERL]","b[urban.cov species:MERL]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=TRUE)+xlim(-50,50)+vline_0(color="grey",linetype=2, size=0.9)+
+  ggplot2::scale_y_discrete(labels = c("forest", "urban"))
+ # labs(x="slope estimates")
+
+plot_coha=mcmc_intervals(modelcov_urb_NON, pars=c( "b[urban.cov species:COHA]","b[forest.cov species:COHA]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=FALSE)+xlim(-50,50)+vline_0(color="grey",linetype=2, size=0.9)
+ # ggplot2::scale_y_discrete(labels = c("forest cover", "urban cover"))
+ # labs(x="slope estimates")
+
+plot_goea=mcmc_intervals(modelcov_urb_NON, pars=c( "b[urban.cov species:GOEA]","b[forest.cov species:GOEA]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=FALSE)+xlim(-50,50)+vline_0(color="grey",linetype=2, size=0.9)
+  #ggplot2::scale_y_discrete(labels = c("forest cover", "urban cover"))
+  #labs(x="slope estimates")
+
+#plot3c#########
+plot_ospr=mcmc_intervals(modelcov_urb_NON, pars=c( "b[forest.cov species:OSPR]","b[urban.cov species:OSPR]"), prob=.95,prob_outer = .95,
+                         point_est = "mean")+yaxis_text(on=FALSE)+xlim(-50,50)+vline_0(color="grey",linetype=2, size=0.9)
+#  ggplot2::scale_y_discrete(labels = c("forest cover", "urban cover"))
+
