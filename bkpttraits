@@ -1,4 +1,18 @@
-mod_c=stan (model_code= " 
+hms=read.csv(file.choose(), h=T)
+
+hms$diets = (hms$diet - mean(hms$diet))/(2 *sd(hms$diet)) 
+hms$size = (hms$mass.kg - mean(hms$mass.kg))/(2 *sd(hms$mass.kg)) 
+hms$habitat = (hms$habitat.types - mean(hms$habitat.types))/(2 *sd(hms$habitat.types)) 
+hms$years = (hms$year - mean(hms$year))/(2 *sd(hms$year)) #standardize/ center around mean year 
+#range(hms$years) #lower=-0.86, upper=0.83, to be used as bounds for bkpoint years
+hms$obs_days = log(hms$obs.hours/24) #transform obs.effort to have it around the same values as other predictors(year)
+Nsp=16 #for ran_bkpoint (no.of species)
+hms$migcode=as.integer(as.factor(hms$migration))
+zeros4=rep(0,4) #used for correlation matrix
+
+str(hms)
+
+mod_d=stan (model_code= " 
             
             data {
             
@@ -7,6 +21,8 @@ mod_c=stan (model_code= "
             real years[N];//explanatory variable (centered around mean)
             int count[N];//no.of individuals per year
             real diet[N];
+            real mass[N];
+            real habitat[N];
             real obs_days[N]; //explanatory variable (centered around mean)
             int Nsp; //no.of populations
             int spcode[N];// id for each population
@@ -21,7 +37,12 @@ mod_c=stan (model_code= "
             real<lower=0> phi;        // level 1 error sd
             vector[4] u[Nsp];         // random effects (level 2) errors
             cholesky_factor_corr[4] L_u_Corr; // cholesky factor for the random effects correlation matrix
-            real diet_eff;
+            real diet_effb;
+            real mass_effb;
+            real habitat_effb;
+            real diet_effa;
+            real mass_effa;
+            real habitat_effa;
             }
             
             transformed parameters {  
@@ -42,8 +63,8 @@ mod_c=stan (model_code= "
             
             for (i in 1:Nsp) {
             alpha[i,1] = beta[1] + u[i,1];
-            alpha[i,2] = beta[2] +(diet[i]*diet_eff) + u[i,2];
-            alpha[i,3] = beta[3] +(diet[i]*diet_eff) + u[i,3];
+            alpha[i,2] = beta[2] +(diet[i]*diet_effb)+ (mass[i]*mass_effb)+(habitat[i]*habitat_effb) + u[i,2];
+            alpha[i,3] = beta[3] +(diet[i]*diet_effa) +(mass[i]*mass_effa)+(habitat[i]*habitat_effa)+ u[i,3];
             alpha[i,4] = bkpoint + u[i,4];
             }
             
@@ -74,8 +95,13 @@ mod_c=stan (model_code= "
             beta[1] ~ cauchy(0, 2.5); // prior: fixed effect, intercept
             beta[2] ~ cauchy(0, 2.5);   // prior: fixed effect, slope before knot
             beta[3] ~ cauchy(0, 2.5);   // prior: fixed effect, slope after knot
-            bkpoint ~ uniform(0,2.5);
-            diet_eff~ uniform(0,10);
+            bkpoint ~ cauchy(0,2.5);
+            diet_effb~ cauchy(0,2.5);
+            mass_effb~ cauchy(0,2.5);
+            habitat_effb~ cauchy(0,2.5);
+            diet_effa~ cauchy(0,2.5);
+            mass_effa~ cauchy(0,2.5);
+            habitat_effa~ cauchy(0,2.5);
             // prior: fixed effect, knot point
             
             sigma_sp[1] ~ cauchy(0,5);    // prior: random effect sd, intercept
@@ -140,9 +166,9 @@ mod_c=stan (model_code= "
             u_Sigma = quad_form_diag(u_Corr, sigma_sp);
             // covariance matrix: u_Sigma = diag(sigma_sp) * u_Corr * diag(sigma_sp)
             
-            }", data=(list(N=length(hms$year),count=hms$count, diet=hms$diet, zeros4=zeros4,Nsp=16, years=hms$years,obs_days=hms$obs_days, spcode=hms$spcode)),chain=4, iter=5500, control=list(max_treedepth=15, adapt_delta=0.999))
+            }", data=(list(N=length(hms$year),habitat= hms$habitat ,count=hms$count,mass=hms$size, diet=hms$diets, zeros4=zeros4,Nsp=16, years=hms$years,obs_days=hms$obs_days, spcode=hms$spcode)),chain=4, iter=200, control=list(adapt_delta=0.99, max_treedepth=15))
 
-print(mod_c,pars=c("beta[1]", "beta[2]", "beta[3]", "bkpoint", "slope_difference", "diet_eff"))
+print(mod_c,pars=c("beta[1]", "beta[2]", "beta[3]", "bkpoint", "slope_difference", "diet_eff", "mass_eff", "habitat_eff"))
 print(mod_c,pars=c("alpha_tosave"))
 posterior=as.data.frame(mod_c)
 
