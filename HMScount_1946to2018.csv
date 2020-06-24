@@ -13,6 +13,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1946,594,RSHA,13,236,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1946,594,RTHA,14,2306,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1946,594,SSHA,15,2382,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1946,594,TUVU,16,66,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1947,592,AMKE,1,116,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1947,592,BAEA,2,89,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1947,592,BWHA,4,6664,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -27,6 +28,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1947,592,RSHA,13,238,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1947,592,RTHA,14,1680,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1947,592,SSHA,15,1726,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1947,592,TUVU,16,268,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1948,577,AMKE,1,145,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1948,577,BAEA,2,79,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1948,577,BWHA,4,15026,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -41,6 +43,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1948,577,RSHA,13,262,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1948,577,RTHA,14,2343,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1948,577,SSHA,15,1650,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1948,577,TUVU,16,300,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1949,640,AMKE,1,339,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1949,640,BAEA,2,84,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1949,640,BWHA,4,9579,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -55,6 +58,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1949,640,RSHA,13,284,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1949,640,RTHA,14,2749,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1949,640,SSHA,15,2963,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1949,640,TUVU,16,376,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1950,625,AMKE,1,234,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1950,625,BAEA,2,116,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1950,625,BWHA,4,5305,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -69,6 +73,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1950,625,RSHA,13,346,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1950,625,RTHA,14,2667,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1950,625,SSHA,15,3674,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1950,625,TUVU,16,81,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1951,561,AMKE,1,247,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1951,561,BAEA,2,87,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1951,561,BWHA,4,10997,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -83,6 +88,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1951,561,RSHA,13,379,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1951,561,RTHA,14,2307,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1951,561,SSHA,15,3008,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1951,561,TUVU,16,50,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1952,636,AMKE,1,219,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1952,636,BAEA,2,91,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1952,636,BWHA,4,12603,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -97,6 +103,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1952,636,RSHA,13,348,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1952,636,RTHA,14,2754,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1952,636,SSHA,15,3566,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1952,636,TUVU,16,31,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1953,651,AMKE,1,220,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1953,651,BAEA,2,59,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1953,651,BWHA,4,7247,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -111,6 +118,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1953,651,RSHA,13,179,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1953,651,RTHA,14,2051,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1953,651,SSHA,15,2791,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1953,651,TUVU,16,201,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1954,630,AMKE,1,174,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1954,630,BAEA,2,65,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1954,630,BWHA,4,5956,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -125,6 +133,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1954,630,RSHA,13,311,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1954,630,RTHA,14,2070,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1954,630,SSHA,15,3183,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1954,630,TUVU,16,1,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1955,630,AMKE,1,264,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1955,630,BAEA,2,88,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1955,630,BWHA,4,9542,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -139,6 +148,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1955,630,RSHA,13,425,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1955,630,RTHA,14,3764,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1955,630,SSHA,15,4709,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1955,630,TUVU,16,62,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1956,586,AMKE,1,204,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1956,586,BAEA,2,53,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1956,586,BWHA,4,8734,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -153,6 +163,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1956,586,RSHA,13,284,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1956,586,RTHA,14,1525,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1956,586,SSHA,15,2048,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1956,586,TUVU,16,1,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1957,601,AMKE,1,174,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1957,601,BAEA,2,39,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1957,601,BWHA,4,8935,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -167,6 +178,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1957,601,RSHA,13,220,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1957,601,RTHA,14,2730,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1957,601,SSHA,15,2662,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1957,601,TUVU,16,222,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1958,654,AMKE,1,217,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1958,654,BAEA,2,41,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1958,654,BWHA,4,8880,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -181,6 +193,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1958,654,RSHA,13,468,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1958,654,RTHA,14,2951,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1958,654,SSHA,15,1752,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1958,654,TUVU,16,14,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1959,623,AMKE,1,281,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1959,623,BAEA,2,45,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1959,623,BWHA,4,5301,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -195,6 +208,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1959,623,RSHA,13,341,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1959,623,RTHA,14,1904,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1959,623,SSHA,15,2825,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1959,623,TUVU,16,26,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1960,635,AMKE,1,221,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1960,635,BAEA,2,23,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1960,635,BWHA,4,11107,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -209,6 +223,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1960,635,RSHA,13,331,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1960,635,RTHA,14,2200,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1960,635,SSHA,15,2233,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1960,635,TUVU,16,5,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1961,673,AMKE,1,464,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1961,673,BAEA,2,40,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1961,673,BWHA,4,8642,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -223,6 +238,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1961,673,RSHA,13,311,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1961,673,RTHA,14,2566,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1961,673,SSHA,15,1723,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1961,673,TUVU,16,129,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1962,650,AMKE,1,456,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1962,650,BAEA,2,35,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1962,650,BWHA,4,8254,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -237,6 +253,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1962,650,RSHA,13,271,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1962,650,RTHA,14,2772,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1962,650,SSHA,15,2181,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1962,650,TUVU,16,0,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1963,718,AMKE,1,260,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1963,718,BAEA,2,21,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1963,718,BWHA,4,9791,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -251,6 +268,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1963,718,RSHA,13,198,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1963,718,RTHA,14,3402,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1963,718,SSHA,15,1518,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1963,718,TUVU,16,178,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1964,711,AMKE,1,235,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1964,711,BAEA,2,27,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1964,711,BWHA,4,10180,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -265,6 +283,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1964,711,RSHA,13,217,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1964,711,RTHA,14,2626,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1964,711,SSHA,15,1259,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1964,711,TUVU,16,7,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1965,688,AMKE,1,391,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1965,688,BAEA,2,36,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1965,688,BWHA,4,9235,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -279,6 +298,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1965,688,RSHA,13,300,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1965,688,RTHA,14,3297,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1965,688,SSHA,15,3103,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1965,688,TUVU,16,105,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1966,575,AMKE,1,539,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1966,575,BAEA,2,25,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1966,575,BWHA,4,10110,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -293,6 +313,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1966,575,RSHA,13,197,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1966,575,RTHA,14,2126,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1966,575,SSHA,15,2883,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1966,575,TUVU,16,0,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1967,552,AMKE,1,554,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1967,552,BAEA,2,30,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1967,552,BWHA,4,8000,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -307,6 +328,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1967,552,RSHA,13,140,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1967,552,RTHA,14,1854,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1967,552,SSHA,15,2330,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1967,552,TUVU,16,3,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1968,511,AMKE,1,592,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1968,511,BAEA,2,41,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1968,511,BWHA,4,14041,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -321,6 +343,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1968,511,RSHA,13,273,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1968,511,RTHA,14,3765,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1968,511,SSHA,15,2253,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1968,511,TUVU,16,1,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1969,817,AMKE,1,537,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1969,817,BAEA,2,30,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1969,817,BWHA,4,8515,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -531,6 +554,7 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1983,912,RSHA,13,451,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1983,912,RTHA,14,3954,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1983,912,SSHA,15,6517,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1983,912,TUVU,16,4,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
 1984,941,AMKE,1,331,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1984,941,BAEA,2,41,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1984,941,BWHA,4,13619,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
@@ -545,6 +569,8 @@ year,obs.hours,species,spcode,count,habitat types,diet index,mass kg,northern la
 1984,941,RSHA,13,208,3,1.48,0.62,47.4,8.3,1800000,generalist,tolerant,partial,specialist,susceptible,medium,625
 1984,941,RTHA,14,3157,11,0.98,1.09,68.5,9.2,2800000,specialist,tolerant,partial,generalist,non-susceptible,low,1126
 1984,941,SSHA,15,3796,9,0.33,0.14,68.9,7.2,410000,specialist,intolerant,partial,specialist,susceptible,medium,165.5
+1984,941,TUVU,16,1,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1425
+1984,941,TUVU,16,1,9,1.48,2,55.3,9.9,8400000,generalist,tolerant,partial,generalist,susceptible,low,1426
 1985,802,AMKE,1,383,11,0.8,0.12,66.5,5.7,2800000,specialist,tolerant,partial,specialist,susceptible,low,115.5
 1985,802,BAEA,2,37,11,1.02,4.65,68.9,17.2,200000,generalist,tolerant,partial,generalist,susceptible,low,4790
 1985,802,BWHA,4,3415,3,1.46,0.41,55.2,9.3,1800000,generalist,intolerant,complete,specialist,non-susceptible,medium,397
