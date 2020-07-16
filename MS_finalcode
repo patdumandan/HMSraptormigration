@@ -1,0 +1,272 @@
+#data
+hms=read.csv(file.choose(), h=T)
+hms$years = (hms$year - mean(hms$year))/(2 *sd(hms$year)) #standardize/ center around mean year 
+#range(hms$years) #lower=-0.86, upper=0.83, to be used as bounds for bkpoint years
+hms$obs_days = log(hms$obs.hours/24) #transform obs.effort to have it around the same values as other predictors(year)
+Nsp=16 #for ran_bkpoint (no.of species)
+zeros4=rep(0,4)
+
+
+#categorical
+hms$habitat<-ifelse(hms$habitat.spec=="specialist", 0, 1)
+hms$diet<-ifelse(hms$diet.spec=="specialist", 0, 1)
+hms$DDT<-ifelse(hms$DDT.susc=="non-susceptible", 0, 1)
+hms$migrate<-ifelse(hms$migration=="complete", 0, 1)
+hms$dist<-ifelse(hms$mig_dist=="long", 0,1)
+
+
+#continuous
+hms$hab1 = (hms$habitat.types - mean(hms$habitat.types))/(2 *sd(hms$habitat.types))
+hms$diet1 = (hms$diet.index - mean(hms$diet.index))/(2 *sd(hms$diet.index))
+hms$mass = (hms$mass.kg - mean(hms$mass.kg))/(2 *sd(hms$mass.kg))
+
+
+#transformed data
+hab16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(hab1)
+diet16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(diet1)
+mass16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(mass)
+ddt16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(DDT)
+mig16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(migrate)
+dist16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(dist)
+
+mod_trait5_cont_fin_mig=stan(model_code= "data {
+                 
+                 vector<lower=0,upper=0>[4] zeros4; // vector for random effects distribution
+                 int N; //no.of observations (length of hms$year)
+                 int Nsp; //no.of populations
+                 real years[N];//explanatory variable (centered around mean)
+                 int count[N];//no.of individuals per year
+                 real habitat[Nsp];//no.of habitat types
+                 real diet[Nsp];
+                 real mass[Nsp];
+                 int DDT[Nsp];
+                 int migrate [Nsp];
+                 real obs_days[N]; // obs.effort
+                 int spcode[N];// id for each population
+                 
+                 }
+                 
+                 parameters {
+                 
+                 vector[3] beta;            // fixed effects, intercept and slopes
+                 real<lower=-0.86,upper=0.83> bkpoint;// fixed effects, knotpoint (bounding specified to help convergence)
+                 vector<lower=0>[4] sigma_sp;   // level 2 error sd per parameter
+                 real<lower=0> phi;        // level 1 error sd
+                 vector[4] u[Nsp];         //  level 2 error sd per species per parameter
+                 cholesky_factor_corr[4] L_u_Corr; // cholesky factor for the random effects correlation matrix
+                 real hab_effa; //effect of habitat after bkpoint
+                 real hab_effb;//effect of habitat before bkpoint
+                 real diet_effa;
+                 real diet_effb;
+                 real mass_effb;
+                 real mass_effa;
+                 real ddt_effa;
+                 real ddt_effb;
+                 real mig_effa;
+                 real mig_effb;
+                 
+                 }
+                 
+                 transformed parameters {  
+                 vector[4] alpha[Nsp];     // random effects
+                 real<lower=0> y_mu[N];              // mean parameter based on regression equation
+                 
+                 for (i in 1:Nsp) {
+                 alpha[i,1] = beta[1] + u[i,1];
+                 alpha[i,2] = beta[2] +habitat[i]*hab_effb+diet[i]*diet_effb+migrate[i]*mig_effb+DDT[i]*ddt_effb+mass[i]*mass_effb+u[i,2];
+                 alpha[i,3] = beta[3] +habitat[i]*hab_effa+diet[i]*diet_effa+migrate[i]*mig_effa+DDT[i]*ddt_effa+mass[i]*mass_effa+u[i,3];
+                 alpha[i,4] = bkpoint + u[i,4];
+                 
+                 }
+                 
+                 
+                 //=====================
+                 // regression equation
+                 //=====================
+                 
+                 for (j in 1:N){
+                 
+                 if (years[j]< alpha[spcode[j],4]) {
+                 
+                 y_mu[j]= exp(alpha[spcode[j],1]+alpha[spcode[j],2]* (years[j]-alpha[spcode[j],4])+obs_days[j]);
+                 }
+                 
+                 else {
+                 y_mu[j]= exp(alpha[spcode[j],1]+alpha[spcode[j],3]* (years[j]-alpha[spcode[j],4])+obs_days[j]);
+                 
+                 }
+                 
+                 } 
+                 }
+                 
+                 model {
+                 
+                 //========
+                 // priors
+                 //========
+                 
+                 beta[1] ~ normal(0, 10); // prior: fixed effect, intercept
+                 beta[2] ~ normal(0, 10);   // prior: fixed effect, slope before knot
+                 beta[3] ~ normal(0, 10);   // prior: fixed effect, slope after knot
+                 bkpoint ~ normal(0,10);
+                 hab_effa~ normal(0,10);
+                 hab_effb~ normal(0,10);
+                 diet_effa~normal (0,10);
+                 diet_effb~normal (0,10);
+                 mass_effb~normal(0,10);                             
+                 mass_effa~normal(0,10);
+                 ddt_effa~normal(0,10);
+                 ddt_effb~normal(0,10);
+                 mig_effa~normal(0,10);
+                 mig_effb~normal(0,10);
+                 
+                 // prior: fixed effect, knot point
+                 
+                 sigma_sp[1] ~ cauchy(0,2.5);    // prior: random effect sd, intercept
+                 sigma_sp[2] ~ cauchy(0,2.5);    // prior: random effect sd, slope before knot
+                 sigma_sp[3] ~ cauchy(0,2.5);    // prior: random effect sd, slope after knot
+                 sigma_sp[4] ~ cauchy(0,2.5);    // prior: random effect sd, knot point
+                 
+                 phi ~ cauchy(0,2.5);       // prior: level 1 error sd
+                 
+                 L_u_Corr ~ lkj_corr_cholesky(1);
+                 // prior: cholesky factor for random effects correlation matrix
+                 // NB. this prior is the lkj correlation distribution with shape parameter 1 
+                 // which is equivalent to a uniform distribution over the possible correlation 
+                 // matrices (where a shape parameter > 1 would have resulted in an upside down
+                 // U-shaped distribution with the mode being located at the identity matrix)
+                 
+                 //=============================
+                 // random effects distribution
+                 //=============================
+                 
+                 for (i in 1:Nsp) u[i] ~ multi_normal_cholesky(zeros4, diag_pre_multiply(sigma_sp, L_u_Corr));
+                 // NB. the second parameter here is the cholesky factor L 
+                 // (for the correlation matrix). It only uses the sd rather 
+                 // than the variances since Sigma = L*L'
+                 
+                 //==================
+                 // model likelihood
+                 //==================
+                 
+                 count ~ neg_binomial_2(y_mu, phi); // likelihood for the observed data
+                 
+                 }
+                 
+                 generated quantities {
+                 
+                 real <lower=0> y_mu_pred[N];   // predicted mean
+                 corr_matrix[4] u_Corr;   // random effects correlation matrix
+                 matrix[4,4] u_Sigma;     // random effects covariance matrix
+                 vector[N] log_lik;
+                 vector[4] alpha_tosave[Nsp];
+                 // monitor random effects for a subset of patients only
+                 // (for plotting predictions) and do not monitor 'alpha' 
+                 // in the model above (since it consumes too much memory!)
+                 
+                 //==================================================
+                 // predicted mean outcome using regression equation
+                 //==================================================
+                 
+                 for (i in 1:Nsp) {  
+                 alpha_tosave[i] = alpha[i];
+                 }
+                 
+                 y_mu_pred = neg_binomial_2_rng(y_mu, phi);
+                 
+                 for (n in 1:N) {
+                 log_lik[n] = neg_binomial_2_lpmf(count [n] |y_mu[n],phi);
+                 }
+                 //=====================================================
+                 // recover the correlation and covariance matrices
+                 // using the cholesky factor of the correlation matrix
+                 //=====================================================
+                 
+                 u_Corr = multiply_lower_tri_self_transpose(L_u_Corr);    
+                 // correlation matrix: u_Corr = L_u_Corr * L_u_Corr'
+                 
+                 u_Sigma = quad_form_diag(u_Corr, sigma_sp);
+                 // covariance matrix: u_Sigma = diag(sigma_sp) * u_Corr * diag(sigma_sp)
+                 
+                 }", 
+                         data=(list(N=length(hms$year),DDT=ddt16$DDT, migrate=mig16$migrate, mass=mass16$mass, diet=diet16$diet1, habitat= hab16$hab1,count=hms$count, zeros4=zeros4,Nsp=16, years=hms$years,obs_days=hms$obs_days, spcode=hms$spcode)),
+                         chain=4, 
+                         iter=2500, control=list(max_treedepth=12))
+
+print(mod_trait5_cont_fin_dist,pars=c("beta[1]", "beta[2]", "beta[3]", "bkpoint", "hab_effa", "diet_effa", "dist_effa","mass_effa","ddt_effa", "hab_effb", "diet_effb",  "dist_effb", "ddt_effb",  "mass_effb" ))
+print(mod_trait5,pars=c("alpha_tosave"))
+log_lik5=rstan::extract(mod_trait5_cont_fin_mig)$log_lik
+loo(log_lik5) #13207.5 +140.8 (behavior normal); 13209.5 +141 (distance);13210.9+140.9 (behavior cauchy)
+
+saveRDS(mod_trait5_cont_fin_mig, "modtrait_final_mig.RDS")
+
+res=rstan::extract(mod_trait5_cont_fin_mig)$y_mu_pred
+res1=apply(res,2,mean)
+resq=cbind(res1, hms$count)
+str(resq)
+resq=as.data.frame(resq)
+resq$diff=resq$V2-resq$res1
+dwtest(resq$diff~hms$year) #1.99; P=0.42
+
+#cholesky decomposition for intercept
+intsp=rstan::extract(mod_trait5_cont_fin_mig, pars="u")$u
+cor_u <- cor(t(apply(intsp, c(2,3), mean)))
+
+#phylo tree
+phy=read.tree("phy.txt")
+require(ape)
+vphy=vcv(phy)
+vphy=read.csv("Vphy.csv")
+Vp=as.vector(as.matrix(Vphy))
+sp=as.vector(as.matrix(spcor))
+spcor=read.csv("spcor.csv")
+Vp=as.numeric(Vp)
+sp=as.numeric(sp)
+str(spcor)
+plot(Vphy~spcor)
+cor.test(sp, Vp)
+plot(Vp~sp, ylab="phylogenetic matrix", xlab="species matrix")
+
+
+posterior=rstan::extract(modtrait_fin_mig)
+posterior=as.data.frame(posterior)
+post1=melt(posterior)
+write.csv(post1, file="post1.csv")
+pairs(mod_trait5_cont_fin_mig, pars=c("hab_effb", "hab_effa", "diet_effb", "diet_effa", "mig_effb", "mig_effa", "mass_effb", "mass_effa", "ddt_effb", "ddt_effa"))
+
+#plots
+gen11=mcmc_intervals(posterior, pars=c("diet_effa","hab_effa", "mig_effa", "mass_effa",
+                                       "ddt_effa"), prob=.80, prob_outer=0.95,
+                     point_est = "median")+
+  ggplot2::scale_y_discrete(labels = c("diet specialization", "habitat specialization", "migratory behavior", "mass", "DDT"))+vline_0(size = 0.25, color = "darkgray", linetype = 2)+
+  labs(x="coefficient estimate")+ ggtitle ("(B) post-breakpoint")+
+  theme(plot.title=element_text(hjust=0,size=15),panel.border=element_rect(size=1,fill=NA,colour="black",linetype="solid"),
+        axis.line=element_blank(),axis.title=element_text(size=12, color="black"),axis.text=element_text(size=12, hjust=0, color="black"),axis.text.x=element_text(vjust=0, color="black"))
+gen11
+
+gen10=mcmc_intervals(posterior, pars=c("diet_effb","hab_effb", "mig_effb", "mass_effb",
+                                       "ddt_effb"), prob=.80, prob_outer=0.95,
+                     point_est = "median")+
+  ggplot2::scale_y_discrete(labels = c("diet specialization", "habitat specialization", "migratory behavior", "mass", "DDT"))+vline_0(size = 0.25, color = "darkgray", linetype = 2)+
+  labs(x="coefficient estimate")+ ggtitle ("(B) pre-breakpoint")+
+  theme(plot.title=element_text(hjust=0,size=15),panel.border=element_rect(size=1,fill=NA,colour="black",linetype="solid"),
+        axis.line=element_blank(),axis.title=element_text(size=12, color="black"),axis.text=element_text(size=12, hjust=0, color="black"),axis.text.x=element_text(vjust=0, color="black"))
+gen10
+
+
+bayesplot::mcmc_areas(posterior, area_method="equal height", pars=c("hab_effb", "hab_effa", "diet_effb", "diet_effa", "mig_effb", "mig_effa", "mass_effb", "mass_effa", "ddt_effb", "ddt_effa"), prob = 0.95, prob_outer = 0.95)+
+  ggplot2::scale_y_discrete(labels=c( "habitat (before)", "habitat (after)", "diet (before)", "diet (after)", "migration (before)", "migration (after)", "mass (before)", "mass (after)", "DDT (before)", "DDT (after)"))
+
+length(which(posterior$hab_effa>0))/length(posterior$hab_effa) #0.96
+length(which(posterior$diet_effa>0))/length(posterior$diet_effa)#0.95
+length(which(posterior$mass_effa>0))/length(posterior$mass_effa)#0.90
+length(which(posterior$ddt_effa>0))/length(posterior$ddt_effa) #0.84
+length(which(posterior$mig_effa>0))/length(posterior$mig_effa) #0.59
+
+length(which(posterior$hab_effb<0))/length(posterior$hab_effb) #0.091/ 0.90
+length(which(posterior$diet_effb<0))/length(posterior$diet_effb)#0.04/ 0.95
+length(which(posterior$mass_effb<0))/length(posterior$mass_effb)#0.17/ 0.82
+length(which(posterior$ddt_effb<0))/length(posterior$ddt_effb) #0.36/ 0.63
+length(which(posterior$mig_effb<0))/length(posterior$mig_effb) #0.53/ 0.46
+
+
