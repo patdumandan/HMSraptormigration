@@ -269,4 +269,79 @@ length(which(posterior$mass_effb<0))/length(posterior$mass_effb)#0.17/ 0.82
 length(which(posterior$ddt_effb<0))/length(posterior$ddt_effb) #0.36/ 0.63
 length(which(posterior$mig_effb<0))/length(posterior$mig_effb) #0.53/ 0.46
 
+#after plots
+
+behaviorplot=finpost %>% 
+  ggplot(aes(x= fct_reorder(variable,mig_order), y=after)) +
+  geom_boxplot(outlier.size=0.5) +ggtitle("Migratory Behavior")+
+  xlab("")+ylab("")+
+  annotate("text", x=2.0, y=10.5, label= "complete", size=4)+
+  annotate("text", x=10.0, y=10.5, label= "partial", size=4)+
+  annotate("rect", xmin = 0, xmax = 3.5, ymin = -Inf, ymax = Inf,fill="grey20",alpha = 0.25, size=2)+
+ # scale_fill_manual(values=c("increasing"="sky blue", "decreasing"="orange", "no change"="pink"))+
+  theme_bw()+theme(axis.text=element_text(color="black"), axis.text.x=element_text(angle=90, vjust=0.5),panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+behaviorplot
+
+ddtplot=finpost %>% 
+  ggplot(aes(x= fct_reorder(variable,ddt_order), y=after)) +
+  geom_boxplot(outlier.size=0.5) +ggtitle("DDT Susceptibility")+
+  xlab("")+ylab("")+
+  annotate("text", x=1.75, y=10.5, label= "not affected", size=4)+
+  annotate("text", x=10.0, y=10.5, label= "affected", size=4)+
+  annotate("rect", xmin = 0, xmax = 3.5, ymin = -Inf, ymax = Inf,fill="grey20",alpha = 0.25, size=2)+
+  scale_fill_manual(values=c("increasing"="sky blue", "decreasing"="orange", "no change"="pink"))+
+  theme_bw()+theme(axis.text=element_text(color="black"), axis.text.x=element_text(angle=90, vjust=0.5),panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+ddtplot
+
+habplot=finpost %>% 
+  ggplot(aes(x= fct_reorder(variable,hab_order), y=after)) +
+  geom_boxplot(outlier.size=0.5) +ggtitle("Habitat Specialization")+
+  xlab("")+ylab("")+
+ # annotate("text", x=1.75, y=10.5, label= "not affected", size=4)+
+#  annotate("text", x=10.0, y=10.5, label= "affected", size=4)+
+ # annotate("rect", xmin = 0, xmax = 3.5, ymin = -Inf, ymax = Inf,fill="grey20",alpha = 0.25, size=2)+
+  scale_fill_manual(values=c("increasing"="sky blue", "decreasing"="orange", "no change"="pink"))+
+  theme_bw()+theme(axis.text=element_text(color="black"), axis.text.x=element_text(angle=90, vjust=0.5),panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+habplot
+
+dietplot=finpost %>% 
+  ggplot(aes(x= fct_reorder(variable,diet_order), y=after)) +
+  geom_boxplot(outlier.size=0.5) +ggtitle("Diet Specialization")+
+  xlab("")+ylab("")+
+  # annotate("text", x=1.75, y=10.5, label= "not affected", size=4)+
+  #  annotate("text", x=10.0, y=10.5, label= "affected", size=4)+
+  # annotate("rect", xmin = 0, xmax = 3.5, ymin = -Inf, ymax = Inf,fill="grey20",alpha = 0.25, size=2)+
+  scale_fill_manual(values=c("increasing"="sky blue", "decreasing"="orange", "no change"="pink"))+
+  theme_bw()+theme(axis.text=element_text(color="black"), axis.text.x=element_text(angle=90, vjust=0.5),panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+dietplot
+
+massplot=finpost %>% 
+  ggplot(aes(x= fct_reorder(variable,mass_order), y=after)) +
+  geom_boxplot(outlier.size=0.5) +ggtitle("Diet Specialization")+
+  xlab("")+ylab("")+
+  # annotate("text", x=1.75, y=10.5, label= "not affected", size=4)+
+  #  annotate("text", x=10.0, y=10.5, label= "affected", size=4)+
+  # annotate("rect", xmin = 0, xmax = 3.5, ymin = -Inf, ymax = Inf,fill="grey20",alpha = 0.25, size=2)+
+  scale_fill_manual(values=c("increasing"="sky blue", "decreasing"="orange", "no change"="pink"))+
+  theme_bw()+theme(axis.text=element_text(color="black"), axis.text.x=element_text(angle=90, vjust=0.5),panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+massplot
+
+
+dietp1=mcmc_intervals(posterior, pars=c("alpha.10.2","alpha.11.2","alpha.15.2","alpha.6.2","alpha.12.2", "alpha.7.2","alpha.1.2","alpha.14.2","alpha.2.2","alpha.8.2", "alpha.5.2", "alpha.9.2","alpha.4.2", "alpha.13.2", "alpha.3.2", "alpha.16.2"), 
+                    prob=.8,prob_outer = 0.95,point_est = "median")+
+  ggplot2::scale_y_discrete(labels = c("Osprey", "Peregrine Falcon", "Sharp-shinned Hawk", "Golden Eagle", "Rough-legged Hawk", "Merlin", "American Kestrel", "Red-tailed Hawk", "Bald Eagle", "Northern Goshawk", "Cooper's Hawk", "Northern Harrier", "Broad-winged Hawk", "Red-shouldered Hawk", "Black Vulture", "Turkey Vulture"))+
+ ggtitle("pre-breakpoint")+theme(axis.text = element_text(size=9, color="black"), axis.text.x = element_text(color = "black"), plot.title = element_text(color = "black"))+
+    xlim(-6,5)+ylab(expression(specialized %->% generalized))
+  # labs(x="pre-change slope estimates")+
+ # theme(plot.title=element_text(hjust=0,size=18),panel.border=element_rect(size=1,fill=NA,colour="black",linetype="solid"),
+ #      axis.line=element_blank(),axis.title=element_text(size=15),axis.text=element_text(size=12))
+dietp1
+
+dietp2=mcmc_intervals(posterior, pars=c("alpha.16.3","alpha.3.3","alpha.13.3","alpha.4.3","alpha.9.3", "alpha.5.3","alpha.8.3","alpha.2.3","alpha.14.3","alpha.1.3", "alpha.7.3", "alpha.12.3","alpha.6.3", "alpha.15.3", "alpha.11.3", "alpha.10.3"), 
+                     prob=.8,prob_outer = 0.95,point_est = "median")+ggplot2::theme(axis.text.y=element_blank(),axis.text.x = element_text(color = "black"), plot.title = element_text(color = "black"))+ggtitle("post-breakpoint")+xlim(-6,5)
+
+  #scale_y_discrete(labels = c("Osprey", "Peregrine Falcon", "Sharp-shinned Hawk", "Golden Eagle", "Rough-legged Hawk", "Merlin", "American Kestrel", "Red-tailed Hawk", "Bald Eagle", "Northern Goshawk", "Cooper's Hawk", "Northern Harrier", "Broad-winged Hawk", "Red-shouldered Hawk", "Black Vulture", "Turkey Vulture"))+
+  
+  
+
 
