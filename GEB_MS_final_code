@@ -6,14 +6,9 @@ hms$obs_days = log(hms$obs.hours/24) #transform obs.effort to have it around the
 Nsp=16 #for ran_bkpoint (no.of species)
 zeros4=rep(0,4)
 
-
 #categorical
-hms$habitat<-ifelse(hms$habitat.spec=="specialist", 0, 1)
-hms$diet<-ifelse(hms$diet.spec=="specialist", 0, 1)
-hms$DDT<-ifelse(hms$DDT.susc=="non-susceptible", 0, 1)
 hms$migrate<-ifelse(hms$migration=="complete", 0, 1)
 hms$dist<-ifelse(hms$mig_dist=="long", 0,1)
-
 
 #continuous
 hms$hab1 = (hms$habitat.types - mean(hms$habitat.types))/(2 *sd(hms$habitat.types))
@@ -21,6 +16,7 @@ hms$diet1 = (hms$diet.index - mean(hms$diet.index))/(2 *sd(hms$diet.index))
 hms$mass = (hms$mass.kg - mean(hms$mass.kg))/(2 *sd(hms$mass.kg))
 hms$migration = (hms$migrate - mean(hms$migrate))/(2 *sd(hms$migrate))
 hms$ddt1=(hms$DDT - mean(hms$DDT))/(2 *sd(hms$DDT))
+
 #transformed data
 hab16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(hab1)
 diet16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(diet1)
@@ -193,12 +189,11 @@ mod_traitfin2=stan(model_code= "data {
                          chain=4, 
                          iter=3000, control=list(max_treedepth=12, adapt_delta=0.99))
 
-print(final_mod_chap1,pars=c("beta[1]", "beta[2]", "beta[3]", "bkpoint", "hab_effa", "diet_effa", "mig_effa","mass_effa","ddt_effa", "hab_effb","mig_effb", "diet_effb", "ddt_effb",  "mass_effb" ))
+print(modtrait_fin2,pars=c("beta[1]", "beta[2]", "beta[3]", "bkpoint", "hab_effa", "diet_effa", "mig_effa","mass_effa","ddt_effa", "hab_effb","mig_effb", "diet_effb", "ddt_effb",  "mass_effb" ))
 saveRDS(mod_traitfin2, file="final_mod_chap1.RDS")
 print(final_mod_chap1,pars=c("alpha_tosave"))
-log_lik5=rstan::extract(mod_trait5_cont_fin_mig)$log_lik
-loo(log_lik5) #13207.5 +140.8 (behavior normal); 13209.5 +141 (distance);13210.9+140.9 (behavior cauchy)
 
+#plots
 
 gen11=mcmc_intervals(posterior, pars=c("diet_effa","hab_effa", "mig_effa", "mass_effa",
                                        "ddt_effa"), prob=.80, prob_outer=0.95,
@@ -216,9 +211,8 @@ gen10=mcmc_areas(posterior, pars=c("ddt_effa","mig_effa", "mass_effa", "diet_eff
         axis.line = element_line(colour = "black"),axis.title=element_text(size=12, color="black"),axis.text=element_text(size=12, hjust=0, color="black"),axis.text.x=element_text(hjust=0.5, color="black"))+xlim(-5,4)
 gen10
 
-saveRDS(mod_trait5_cont_fin_mig, "modtrait_final_mig.RDS")
 
-res=rstan::extract(mod_trait5_cont_fin_mig)$y_mu_pred
+res=rstan::extract(modtrait_fin2)$y_mu_pred
 res1=apply(res,2,mean)
 resq=cbind(res1, hms$count)
 str(resq)
