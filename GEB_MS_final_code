@@ -6,9 +6,10 @@ hms$obs_days = log(hms$obs.hours/24) #transform obs.effort to have it around the
 Nsp=16 #for ran_bkpoint (no.of species)
 zeros4=rep(0,4)
 
+
 #categorical
+hms$DDT<-ifelse(hms$DDT.susc=="non-susceptible", 0, 1)
 hms$migrate<-ifelse(hms$migration=="complete", 0, 1)
-hms$dist<-ifelse(hms$mig_dist=="long", 0,1)
 
 #continuous
 hms$hab1 = (hms$habitat.types - mean(hms$habitat.types))/(2 *sd(hms$habitat.types))
@@ -17,7 +18,7 @@ hms$mass = (hms$mass.kg - mean(hms$mass.kg))/(2 *sd(hms$mass.kg))
 hms$migration = (hms$migrate - mean(hms$migrate))/(2 *sd(hms$migrate))
 hms$ddt1=(hms$DDT - mean(hms$DDT))/(2 *sd(hms$DDT))
 
-#transformed data
+#input data: vector of trait values
 hab16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(hab1)
 diet16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(diet1)
 mass16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(mass)
@@ -25,7 +26,7 @@ ddt16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(ddt1)
 mig16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(migration)
 dist16=hms%>% group_by(species)%>%summarize_all(mean)%>%select(dist)
 
-mod_traitfin2=stan(model_code= "data {
+mod_traitfin_2=stan(model_code= "data {
                  
                  vector<lower=0,upper=0>[4] zeros4; // vector for random effects distribution
                  int N; //no.of observations (length of hms$year)
@@ -151,7 +152,7 @@ mod_traitfin2=stan(model_code= "data {
                  
                  generated quantities {
                  
-                 real <lower=0> y_mu_pred[N];   // predicted mean
+                 int <lower=0> y_mu_pred[N];   // predicted mean
                  corr_matrix[4] u_Corr;   // random effects correlation matrix
                  matrix[4,4] u_Sigma;     // random effects covariance matrix
                  vector[N] log_lik;
@@ -168,10 +169,11 @@ mod_traitfin2=stan(model_code= "data {
                  alpha_tosave[i] = alpha[i];
                  }
                  
-                 y_mu_pred = neg_binomial_2_rng(y_mu, phi);
+               //  y_mu_pred = neg_binomial_2_rng(y_mu, phi);
                  
                  for (n in 1:N) {
                  log_lik[n] = neg_binomial_2_lpmf(count [n] |y_mu[n],phi);
+                 y_mu_pred[n] = neg_binomial_2_rng(y_mu[n], phi);
                  }
                  //=====================================================
                  // recover the correlation and covariance matrices
@@ -187,32 +189,49 @@ mod_traitfin2=stan(model_code= "data {
                  }", 
                          data=(list(N=length(hms$year),DDT=ddt16$ddt1, migrate=mig16$migration, mass=mass16$mass, diet=diet16$diet1, habitat= hab16$hab1,count=hms$count, zeros4=zeros4,Nsp=16, years=hms$years,obs_days=hms$obs_days, spcode=hms$spcode)),
                          chain=4, 
-                         iter=3000, control=list(max_treedepth=12, adapt_delta=0.99))
+                         iter=2500, control=list(adapt_delta=0.99, max_treedepth=12))
 
-print(modtrait_fin2,pars=c("beta[1]", "beta[2]", "beta[3]", "bkpoint", "hab_effa", "diet_effa", "mig_effa","mass_effa","ddt_effa", "hab_effb","mig_effb", "diet_effb", "ddt_effb",  "mass_effb" ))
-saveRDS(mod_traitfin2, file="final_mod_chap1.RDS")
-print(final_mod_chap1,pars=c("alpha_tosave"))
+print(final_mod_chap1,pars=c("beta[1]", "beta[2]", "beta[3]", "bkpoint", "hab_effa", "diet_effa", "mig_effa","mass_effa","ddt_effa", "hab_effb","mig_effb", "diet_effb", "ddt_effb",  "mass_effb" ))
+saveRDS(mod_traitfin_2, file="finalest_mod_chap1.RDS")
+
 
 #plots
+#species-specific
+post=rstan::extract(mod_traitfin_2)$y_mu
+post=as.data.frame(post)
+str(post)
 
+sp3=post[,which(hms$spcode==3)] 
+matplot(t(sp3),type="l",col="grey",lty=1,xaxt="n", ylab = "count (N)", main= "black vulture")
+axis(1,c(1985:2018),at=c(0:33))
+mean_sp3=apply(sp3,2,mean)
+lines(mean_sp3~c(1:33),col="white", lwd=2)
+blvu=subset(hms, species=="BLVU")
+length(blvu$count)
+points(blvu$count, pch=21, cex=0.5, col="black", bg="black")
+abline(v=27, col="black",lwd=3,lty=2)
+rect(24,0,30,20000,col = rgb(0.5,0.5,0.5,1/4))
+
+
+#trait effects
 gen11=mcmc_intervals(posterior, pars=c("diet_effa","hab_effa", "mig_effa", "mass_effa",
                                        "ddt_effa"), prob=.80, prob_outer=0.95,
                      point_est = "median")+ggplot2::  theme(plot.title=element_text(hjust=0,size=15),panel.border=element_blank(),
-                                                            axis.line= element_line(colour = "black"),axis.title=element_text(size=12, color="black"),axis.text=element_text(size=12, hjust=0, color="black"),axis.text.x=element_text(vjust=0, color="black"), axis.text.y = element_blank())+
-  ggtitle ("post-breakpoint")+xlim(-5,4)
+                                                            axis.line= element_line(colour = "black"),axis.title=element_text(size=12, color="black"),axis.text=element_text(size=12, hjust=0, color="black"),axis.text.x=element_text(vjust=0, color="black"), axis.text.y = element_blank())+ggtitle ("post-breakpoint")+xlim(-5,4)
 
-
-gen10=mcmc_areas(posterior, pars=c("ddt_effa","mig_effa", "mass_effa", "diet_effa",
+gen10=mcmc_areas(posterior, pars=c("ddt_effb","mig_effb", "mass_effb", "diet_effb",
                                        "hab_effa"), prob=.80, prob_outer=0.95,
                      point_est = "median")+
   ggplot2::scale_y_discrete(labels = c("DDT susceptibility", "migratory behavior", "mass", "diet specialization", "habitat specialization"))+vline_0(size = 0.25, color = "darkgray", linetype = 2)+
-  ggtitle ("post-breakpoint")+
+  ggtitle ("pre-breakpoint")+
   theme(plot.title=element_text(hjust=0,size=15),panel.border=element_blank(),
         axis.line = element_line(colour = "black"),axis.title=element_text(size=12, color="black"),axis.text=element_text(size=12, hjust=0, color="black"),axis.text.x=element_text(hjust=0.5, color="black"))+xlim(-5,4)
 gen10
 
 
-res=rstan::extract(modtrait_fin2)$y_mu_pred
+#autocorrelation test: dwtest
+require(lmtest)
+res=rstan::extract(mod_trait5_cont_fin_mig)$y_mu_pred
 res1=apply(res,2,mean)
 resq=cbind(res1, hms$count)
 str(resq)
@@ -220,7 +239,7 @@ resq=as.data.frame(resq)
 resq$diff=resq$V2-resq$res1
 dwtest(resq$diff~hms$year) #1.99; P=0.42
 
-#cholesky decomposition for intercept
+#cholesky decomposition for model params
 intsp=rstan::extract(modtrait_fin_mig, pars="u")$u
 cor_u <- cor(t(apply(intsp, c(2,3), mean)))
 str(cor_u)
@@ -229,53 +248,25 @@ write.csv(cor_u, "spcor.csv")
 #phylo tree
 phy=read.tree("phy.txt")
 require(ape)
-Vphy=vcv(phy) #variance-covarianc ematrix of phylo tree
+Vphy=vcv(phy) #variance-covariance matrix of phylo tree
 
-vphy=read.csv("Vphy1.csv")
+vp=read.csv(file.choose(), h=T)
 spcor=read.csv("spcor1.csv")
 
 #check that we're only using lower triangular matrix
 vphy=lower.tri(vphy, diag = TRUE)
 spcor=lower.tri(spcor, diag = TRUE)
 
-Vp=as.vector(as.matrix(Vphy))
+Vp=as.vector(as.matrix(vp))
 sp=as.vector(as.matrix(spcor))
-Vp=as.numeric(Vp)
+vp=as.numeric(Vp)
 sp=as.numeric(sp)
 str(spcor)
 cor.test(sp, Vp) # 0.24 [0.08, 0.40]; P=0.005
-plot(Vp~sp, ylab="phylogenetic matrix", xlab="species matrix")
+plot(vp~sp, ylab="phylogenetic matrix", xlab="species matrix")
+length(sp)
 
-
-posterior=rstan::extract(modtrait_fin_mig)
-posterior=as.data.frame(posterior)
-post1=melt(posterior)
-write.csv(post1, file="post1.csv")
-pairs(mod_trait5_cont_fin_mig, pars=c("hab_effb", "hab_effa", "diet_effb", "diet_effa", "mig_effb", "mig_effa", "mass_effb", "mass_effa", "ddt_effb", "ddt_effa"))
-
-#plots
-gen11=mcmc_intervals(posterior, pars=c("diet_effa","hab_effa", "mig_effa", "mass_effa",
-                                       "ddt_effa"), prob=.80, prob_outer=0.95,
-                     point_est = "median")+
-  ggplot2::scale_y_discrete(labels = c("diet specialization", "habitat specialization", "migratory behavior", "mass", "DDT"))+vline_0(size = 0.25, color = "darkgray", linetype = 2)+
-  labs(x="coefficient estimate")+ ggtitle ("(B) post-breakpoint")+
-  theme(plot.title=element_text(hjust=0,size=15),panel.border=element_rect(size=1,fill=NA,colour="black",linetype="solid"),
-        axis.line=element_blank(),axis.title=element_text(size=12, color="black"),axis.text=element_text(size=12, hjust=0, color="black"),axis.text.x=element_text(vjust=0, color="black"))
-gen11
-
-gen10=mcmc_intervals(posterior, pars=c("diet_effb","hab_effb", "mig_effb", "mass_effb",
-                                       "ddt_effb"), prob=.80, prob_outer=0.95,
-                     point_est = "median")+
-  ggplot2::scale_y_discrete(labels = c("diet specialization", "habitat specialization", "migratory behavior", "mass", "DDT"))+vline_0(size = 0.25, color = "darkgray", linetype = 2)+
-  labs(x="coefficient estimate")+ ggtitle ("(B) pre-breakpoint")+
-  theme(plot.title=element_text(hjust=0,size=15),panel.border=element_rect(size=1,fill=NA,colour="black",linetype="solid"),
-        axis.line=element_blank(),axis.title=element_text(size=12, color="black"),axis.text=element_text(size=12, hjust=0, color="black"),axis.text.x=element_text(vjust=0, color="black"))
-gen10
-
-
-bayesplot::mcmc_areas(posterior, area_method="equal height", pars=c("hab_effb", "hab_effa", "diet_effb", "diet_effa", "mig_effb", "mig_effa", "mass_effb", "mass_effa", "ddt_effb", "ddt_effa"), prob = 0.95, prob_outer = 0.95)+
-  ggplot2::scale_y_discrete(labels=c( "habitat (before)", "habitat (after)", "diet (before)", "diet (after)", "migration (before)", "migration (after)", "mass (before)", "mass (after)", "DDT (before)", "DDT (after)"))
-
+#calculate PD
 length(which(posterior$hab_effa>0))/length(posterior$hab_effa) #0.96
 length(which(posterior$diet_effa>0))/length(posterior$diet_effa)#0.95
 length(which(posterior$mass_effa>0))/length(posterior$mass_effa)#0.90
@@ -287,5 +278,3 @@ length(which(posterior$diet_effb<0))/length(posterior$diet_effb)#0.04/ 0.95
 length(which(posterior$mass_effb<0))/length(posterior$mass_effb)#0.17/ 0.82
 length(which(posterior$ddt_effb<0))/length(posterior$ddt_effb) #0.36/ 0.63
 length(which(posterior$mig_effb<0))/length(posterior$mig_effb) #0.53/ 0.46
-
-
