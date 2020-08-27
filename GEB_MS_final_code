@@ -1,5 +1,3 @@
-#MS thesis chapter1 analysis#
-
 #data
 hms=read.csv(file.choose(), h=T)
 hms$years = (hms$year - mean(hms$year))/(2 *sd(hms$year)) #standardize/ center around mean year 
