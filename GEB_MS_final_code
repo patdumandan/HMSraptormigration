@@ -1,3 +1,5 @@
+#MS thesis chapter1 analysis#
+
 #data
 hms=read.csv(file.choose(), h=T)
 hms$years = (hms$year - mean(hms$year))/(2 *sd(hms$year)) #standardize/ center around mean year 
@@ -120,9 +122,9 @@ mod_traitfin_2=stan(model_code= "data {
                  // prior: fixed effect, knot point
                  
                  sigma_sp[1] ~ cauchy(0,2.5);    // prior: random effect sd, intercept
-                 sigma_sp[2] ~ cauchy(0,2.5);    // prior: random effect sd, slope before knot
-                 sigma_sp[3] ~ cauchy(0,2.5);    // prior: random effect sd, slope after knot
-                 sigma_sp[4] ~ cauchy(0,2.5);    // prior: random effect sd, knot point
+                 sigma_sp[2] ~ cauchy(0,2.5);    // prior: random effect sd, slope before bkpt
+                 sigma_sp[3] ~ cauchy(0,2.5);    // prior: random effect sd, slope after bkpt
+                 sigma_sp[4] ~ cauchy(0,2.5);    // prior: random effect sd, bkpt
                  
                  phi ~ cauchy(0,2.5);       // prior: level 1 error sd
                  
